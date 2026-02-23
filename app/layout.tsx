@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
+import { CartProvider } from "@/context/CartContext";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin", "latin-ext"],
@@ -22,8 +23,10 @@ export default function RootLayout({
   return (
     <html lang="es" className={plusJakarta.variable}>
       <body className="min-h-screen font-sans antialiased">
-        {children}
-        <WhatsAppFloat />
+        <CartProvider>
+          {children}
+          <WhatsAppFloat />
+        </CartProvider>
       </body>
     </html>
   );

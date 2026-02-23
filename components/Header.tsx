@@ -1,6 +1,10 @@
 "use client";
 
+import Link from "next/link";
+import { useCart } from "@/context/CartContext";
+
 export default function Header() {
+  const { count: cartCount } = useCart();
   const navLinks = [
     { label: "FAQ", href: "#faq" },
     { label: "Novedades", href: "#novedades" },
@@ -16,15 +20,15 @@ export default function Header() {
         <div className="flex items-center justify-between gap-4 flex-wrap">
           {/* Menú hamburguesa + Logo */}
           <div className="flex items-center gap-2 min-w-0">
-            <button
-              type="button"
+            <Link
+              href="/productos"
               className="p-2 rounded hover:bg-white/10 transition-colors"
-              aria-label="Menú"
+              aria-label="Menú de filtros y categorías"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
               </svg>
-            </button>
+            </Link>
             <a href="/" className="flex items-center shrink-0 font-bold text-xl uppercase tracking-tight">
               Foto Sonido
             </a>
@@ -72,7 +76,7 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               <span className="absolute top-1 right-1 bg-foto-yellow text-gray-900 text-xs font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
-                0
+                {cartCount}
               </span>
             </a>
           </div>

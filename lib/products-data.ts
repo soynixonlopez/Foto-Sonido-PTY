@@ -10,6 +10,11 @@ export const FILTER_FAMILIES = [
   "Microondas", "Televisores", "Cómputo", "Extractores", "Estufas",
 ];
 
+/** Clase = categoría de producto (TV, Cel, PC, etc.) */
+export const FILTER_CLASSES = [
+  "Audio", "Celulares y Tablets", "Cómputo", "Electrodomésticos", "Línea Blanca", "Televisores",
+];
+
 export const allProducts: Product[] = [
   {
     id: "1",
@@ -155,6 +160,7 @@ export function filterProducts(opts: {
   maxPrice: number;
   brands: string[];
   families: string[];
+  classes?: string[];
   sort: "relevance" | "price-asc" | "price-desc";
 }): Product[] {
   let list = allProducts.filter(
@@ -165,6 +171,9 @@ export function filterProducts(opts: {
   }
   if (opts.families.length > 0) {
     list = list.filter((p) => opts.families.includes(p.family));
+  }
+  if (opts.classes && opts.classes.length > 0) {
+    list = list.filter((p) => opts.classes!.includes(p.category));
   }
   if (opts.sort === "price-asc") list = [...list].sort((a, b) => a.price - b.price);
   if (opts.sort === "price-desc") list = [...list].sort((a, b) => b.price - a.price);
