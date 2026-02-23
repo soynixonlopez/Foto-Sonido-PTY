@@ -13,6 +13,9 @@ const plusJakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   title: "Foto Sonido | Marketplace - Línea Blanca, Electrodomésticos y Tecnología",
   description: "Tu marketplace de confianza para línea blanca, electrodomésticos, tecnología y más.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
