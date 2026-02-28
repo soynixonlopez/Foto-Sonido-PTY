@@ -16,11 +16,14 @@ import {
   eventRegistrationData,
   backToSchoolBannerData,
 } from "@/lib/data";
+import { getProductsForHomeSections } from "@/lib/supabase/public";
+import type { Product } from "@/lib/types";
 
-export default function Home() {
+export default async function Home() {
   const [bannerVertical, bannerSonido, bannerTv, bannerLaptop, bannerClases, bannerDesayuno, bannerHorizontal] =
     banners;
   const [productDestacado] = featuredProducts;
+  const sectionProducts = await getProductsForHomeSections();
 
   return (
     <>
@@ -48,37 +51,42 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Desktop: grid igual a referencia — vertical 2 filas | 4 cards + producto | 2 cards + horizontal */}
+        {/* Desktop: izquierda = 2x2 | centro = banner vertical "Foto Sonido te llama" | derecha = Desayuno + Producto + Futboleros */}
         <div
           className="hidden lg:grid gap-2 sm:gap-3 w-full"
           style={{
-            gridTemplateColumns: "minmax(160px, 1.15fr) repeat(4, minmax(0, 1fr))",
+            gridTemplateColumns: "repeat(2, minmax(0, 1fr)) minmax(160px, 1.15fr) repeat(2, minmax(0, 1fr))",
             gridTemplateRows: "minmax(220px, 1fr) minmax(220px, 1fr)",
           }}
         >
-          <div className="row-span-2 min-h-[440px]">
-            <BannerCard banner={bannerVertical} className="h-full min-h-0" />
-          </div>
-          <div className="min-h-0 aspect-square max-h-full">
-            <BannerCard banner={bannerTv} className="h-full w-full" />
-          </div>
-          <div className="min-h-0 aspect-square max-h-full">
-            <BannerCard banner={bannerLaptop} className="h-full w-full" />
-          </div>
+          {/* Izquierda: Desayuno, Producto */}
           <div className="min-h-0 aspect-square max-h-full">
             <BannerCard banner={bannerDesayuno} className="h-full w-full" />
           </div>
           <div className="min-h-0 aspect-square max-h-full">
             <ProductCard product={productDestacado} compact />
           </div>
+          {/* Centro: banner vertical "Foto Sonido te llama" */}
+          <div className="row-span-2 min-h-[440px]" style={{ gridColumn: 3 }}>
+            <BannerCard banner={bannerVertical} className="h-full min-h-0" />
+          </div>
+          {/* Derecha: 4 cuadros (TV, Laptop | Sonido, Clases) */}
+          <div className="min-h-0 aspect-square max-h-full">
+            <BannerCard banner={bannerTv} className="h-full w-full" />
+          </div>
+          <div className="min-h-0 aspect-square max-h-full">
+            <BannerCard banner={bannerLaptop} className="h-full w-full" />
+          </div>
+          {/* Fila 2 izquierda: banner horizontal */}
+          <div className="min-h-0 col-span-2 row-span-1" style={{ minHeight: "220px", gridColumn: "1 / 3" }}>
+            <BannerCard banner={bannerHorizontal} className="h-full w-full min-h-[200px]" />
+          </div>
+          {/* Fila 2 derecha: Sonido, Clases */}
           <div className="min-h-0 aspect-square max-h-full">
             <BannerCard banner={bannerSonido} className="h-full w-full" />
           </div>
           <div className="min-h-0 aspect-square max-h-full">
             <BannerCard banner={bannerClases} className="h-full w-full" />
-          </div>
-          <div className="min-h-0 col-span-2" style={{ minHeight: "220px" }}>
-            <BannerCard banner={bannerHorizontal} className="h-full w-full min-h-[200px]" />
           </div>
         </div>
 
@@ -91,15 +99,35 @@ export default function Home() {
           <BigBannersRow banners={bigBanners} />
         </section>
 
-        {/* Sección más productos */}
-        <section className="mt-10 sm:mt-14 w-full">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 px-2">Ofertas destacadas</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 px-0">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </section>
+        {/* Secciones dinámicas desde el panel (Promociones, Últimos modelos, Destacados, Nuevos) */}
+        {sectionProducts && (
+          <>
+            {sectionProducts.promociones.length > 0 && (
+              <ProductSection title="Promociones" products={sectionProducts.promociones} />
+            )}
+            {sectionProducts.ultimos_modelos.length > 0 && (
+              <ProductSection title="Últimos modelos" products={sectionProducts.ultimos_modelos} />
+            )}
+            {sectionProducts.destacados.length > 0 && (
+              <ProductSection title="Ofertas destacadas" products={sectionProducts.destacados} />
+            )}
+            {sectionProducts.nuevos.length > 0 && (
+              <ProductSection title="Nuevos" products={sectionProducts.nuevos} />
+            )}
+          </>
+        )}
+
+        {/* Ofertas destacadas: estático solo cuando no hay secciones desde el panel */}
+        {(!sectionProducts || sectionProducts.destacados.length === 0) && (
+          <section className="mt-10 sm:mt-14 w-full">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 px-2">Ofertas destacadas</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 px-0">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* Registro de eventos */}
         <EventRegistrationBanner data={eventRegistrationData} />
@@ -115,5 +143,18 @@ export default function Home() {
 
       <Footer />
     </>
+  );
+}
+
+function ProductSection({ title, products }: { title: string; products: Product[] }) {
+  return (
+    <section className="mt-10 sm:mt-14 w-full">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 px-2">{title}</h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 px-0">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} compact />
+        ))}
+      </div>
+    </section>
   );
 }

@@ -4,16 +4,94 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
+import { getMarketplaceProductById } from "@/lib/supabase/public";
 import { getProductById } from "@/lib/products-data";
+import { useEffect, useState } from "react";
+import type { Product } from "@/lib/types";
+import { createClient } from "@/lib/supabase/client";
 
-const WHATSAPP_NUMBER = "50760000000"; // Reemplazar con número real
+const WHATSAPP_NUMBER = "50760000000";
 const WHATSAPP_MSG = (name: string, price: number) =>
   `Hola, me interesa comprar: ${encodeURIComponent(name)} - $${price.toFixed(2)}`;
 
 export default function ProductoDetallePage() {
   const params = useParams();
   const id = typeof params.id === "string" ? params.id : params.id?.[0];
-  const product = id ? getProductById(id) : undefined;
+  const [product, setProduct] = useState<Product | null | undefined>(undefined);
+  const [orderModal, setOrderModal] = useState(false);
+  const [orderEmail, setOrderEmail] = useState("");
+  const [orderQty, setOrderQty] = useState(1);
+  const [orderSending, setOrderSending] = useState(false);
+  const [orderDone, setOrderDone] = useState(false);
+  const [orderError, setOrderError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!id) {
+      setProduct(null);
+      return;
+    }
+    getMarketplaceProductById(id).then((p) => {
+      if (p) setProduct(p);
+      else setProduct(getProductById(id) ?? null);
+    });
+  }, [id]);
+
+  const handleSubmitOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!product) return;
+    setOrderError(null);
+    setOrderSending(true);
+    try {
+      let supabase;
+      try {
+        supabase = createClient();
+      } catch {
+        setOrderError("Supabase no configurado. Configura las variables de entorno para registrar pedidos.");
+        setOrderSending(false);
+        return;
+      }
+      const total = product.price * orderQty;
+      const { data: order, error: orderErr } = await supabase
+        .from("orders")
+        .insert({ status: "pendiente", total, user_email: orderEmail || null })
+        .select("id")
+        .single();
+      if (orderErr || !order) {
+        setOrderError(orderErr?.message ?? "No se pudo crear el pedido.");
+        return;
+      }
+      const { error: itemErr } = await supabase.from("order_items").insert({
+        order_id: order.id,
+        product_id: product.id,
+        quantity: orderQty,
+        price: product.price,
+      });
+      if (itemErr) {
+        setOrderError(itemErr.message);
+        return;
+      }
+      setOrderDone(true);
+      setTimeout(() => {
+        setOrderModal(false);
+        setOrderDone(false);
+        setOrderEmail("");
+        setOrderQty(1);
+      }, 2000);
+    } catch (err) {
+      setOrderError(err instanceof Error ? err.message : "Error al registrar el pedido.");
+    } finally {
+      setOrderSending(false);
+    }
+  };
+
+  if (product === undefined) {
+    return (
+      <>
+        <Header />
+        <div className="w-full px-2 py-12 text-center text-gray-500">Cargando...</div>
+      </>
+    );
+  }
 
   if (!product) {
     return (
@@ -45,7 +123,6 @@ export default function ProductoDetallePage() {
         </nav>
 
         <div className="max-w-5xl mx-auto flex flex-col lg:flex-row gap-8">
-          {/* Galería */}
           <div className="lg:w-1/2 space-y-2">
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-md">
               <Image
@@ -71,7 +148,6 @@ export default function ProductoDetallePage() {
             )}
           </div>
 
-          {/* Info y acciones */}
           <div className="lg:w-1/2">
             <p className="text-sm font-bold text-gray-500 uppercase tracking-wider">
               {product.brand}
@@ -117,6 +193,7 @@ export default function ProductoDetallePage() {
               </a>
               <button
                 type="button"
+                onClick={() => setOrderModal(true)}
                 className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-gray-800 text-white font-semibold hover:bg-gray-900 transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,6 +205,62 @@ export default function ProductoDetallePage() {
           </div>
         </div>
       </div>
+
+      {orderModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+            <h3 className="text-lg font-bold text-gray-900">Registrar pedido</h3>
+            <p className="text-sm text-gray-500 mt-1">
+              {product.name} — ${product.price.toFixed(2)} × {orderQty} = ${(product.price * orderQty).toFixed(2)}
+            </p>
+            {orderDone ? (
+              <p className="mt-4 text-green-600 font-medium">Pedido registrado correctamente.</p>
+            ) : (
+              <form onSubmit={handleSubmitOrder} className="mt-4 space-y-4">
+                <div>
+                  <label htmlFor="order-email" className="block text-sm font-medium text-gray-700 mb-1">Correo (opcional)</label>
+                  <input
+                    id="order-email"
+                    type="email"
+                    value={orderEmail}
+                    onChange={(e) => setOrderEmail(e.target.value)}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900"
+                    placeholder="tu@correo.com"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="order-qty" className="block text-sm font-medium text-gray-700 mb-1">Cantidad</label>
+                  <input
+                    id="order-qty"
+                    type="number"
+                    min={1}
+                    value={orderQty}
+                    onChange={(e) => setOrderQty(Number(e.target.value) || 1)}
+                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-900"
+                  />
+                </div>
+                {orderError && <p className="text-sm text-red-600">{orderError}</p>}
+                <div className="flex gap-2 justify-end">
+                  <button
+                    type="button"
+                    onClick={() => { setOrderModal(false); setOrderError(null); }}
+                    className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={orderSending}
+                    className="px-4 py-2 rounded-lg bg-foto-red text-white font-semibold hover:bg-foto-red-dark disabled:opacity-50"
+                  >
+                    {orderSending ? "Enviando..." : "Confirmar pedido"}
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 }

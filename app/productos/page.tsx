@@ -1,19 +1,31 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
 import {
-  allProducts,
   filterProducts,
   FILTER_BRANDS,
   FILTER_FAMILIES,
 } from "@/lib/products-data";
+import { getMarketplaceProducts } from "@/lib/supabase/public";
 import type { Product } from "@/lib/types";
 
 const PRICE_MAX = 9000;
 const PAGE_SIZE = 12;
+
+function filterProductList(
+  list: Product[],
+  opts: { minPrice: number; maxPrice: number; brands: string[]; families: string[]; sort: "relevance" | "price-asc" | "price-desc" }
+): Product[] {
+  let out = list.filter((p) => p.price >= opts.minPrice && p.price <= opts.maxPrice);
+  if (opts.brands.length > 0) out = out.filter((p) => opts.brands.includes(p.brand));
+  if (opts.families.length > 0) out = out.filter((p) => opts.families.includes(p.family));
+  if (opts.sort === "price-asc") out = [...out].sort((a, b) => a.price - b.price);
+  if (opts.sort === "price-desc") out = [...out].sort((a, b) => b.price - a.price);
+  return out;
+}
 
 function ProductListingCard({ product }: { product: Product }) {
   return (
@@ -61,22 +73,31 @@ function ProductListingCard({ product }: { product: Product }) {
 }
 
 export default function ProductosPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(PRICE_MAX);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [selectedFamilies, setSelectedFamilies] = useState<string[]>([]);
   const [sort, setSort] = useState<"relevance" | "price-asc" | "price-desc">("relevance");
 
+  useEffect(() => {
+    getMarketplaceProducts().then((list) => {
+      setProducts(list);
+      setLoading(false);
+    });
+  }, []);
+
   const filtered = useMemo(
     () =>
-      filterProducts({
+      filterProductList(products, {
         minPrice,
         maxPrice,
         brands: selectedBrands,
         families: selectedFamilies,
         sort,
       }),
-    [minPrice, maxPrice, selectedBrands, selectedFamilies, sort]
+    [products, minPrice, maxPrice, selectedBrands, selectedFamilies, sort]
   );
 
   const toggleBrand = (b: string) => {
@@ -97,6 +118,9 @@ export default function ProductosPage() {
     <>
       <Header />
       <div className="w-full px-2 py-4 min-h-screen bg-gray-50">
+        {loading && (
+          <div className="flex justify-center py-8 text-gray-500">Cargando productos...</div>
+        )}
         {/* Breadcrumb y resumen */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
           <nav className="text-sm text-gray-500">

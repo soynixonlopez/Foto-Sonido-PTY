@@ -18,6 +18,8 @@ export interface Product {
   brand: string;
   family: string;
   specs?: string[];
+  /** Motivos para mostrar en la home: promociones, ultimos_modelos, destacados, nuevos */
+  sections?: string[];
 }
 
 export interface BannerBrand {

@@ -90,7 +90,7 @@ export default function Footer() {
 
       <div className="w-full px-2 py-12 sm:py-14">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-4">
-          {/* Logo + redes + newsletter */}
+          {/* Logo + redes */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2 space-y-6">
             <a href="/" className="inline-block">
               <span className="text-2xl font-bold tracking-tight text-white">Foto Sonido</span>
@@ -109,28 +109,6 @@ export default function Footer() {
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                 </a>
               ))}
-            </div>
-            <div>
-              <p className="text-white font-semibold text-sm mb-2">Newsletter</p>
-              <p className="text-slate-400 text-sm mb-3">
-                Ofertas, novedades y lanzamientos en tu correo.
-              </p>
-              <form
-                className="flex gap-2"
-                onSubmit={(e) => e.preventDefault()}
-              >
-                <input
-                  type="email"
-                  placeholder="Tu correo"
-                  className="flex-1 min-w-0 rounded-lg border border-slate-600 bg-slate-800/80 px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:border-foto-red focus:outline-none focus:ring-1 focus:ring-foto-red"
-                />
-                <button
-                  type="submit"
-                  className="shrink-0 px-4 py-2.5 rounded-lg bg-foto-red text-white text-sm font-semibold hover:bg-foto-red-dark transition-colors"
-                >
-                  Enviar
-                </button>
-              </form>
             </div>
           </div>
 
