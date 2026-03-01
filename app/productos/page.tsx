@@ -10,33 +10,27 @@ import {
   FILTER_FAMILIES,
   FILTER_CLASSES,
 } from "@/lib/products-data";
-<<<<<<< HEAD
 import { getMarketplaceProducts } from "@/lib/supabase/public";
-=======
 import { useCart } from "@/context/CartContext";
->>>>>>> 489535aa1ccb5cbf6788dd4aa79f3d4426b3abb7
 import type { Product } from "@/lib/types";
 
 const PRICE_MAX = 9000;
 const PAGE_SIZE = 12;
 
-<<<<<<< HEAD
 function filterProductList(
   list: Product[],
-  opts: { minPrice: number; maxPrice: number; brands: string[]; families: string[]; sort: "relevance" | "price-asc" | "price-desc" }
+  opts: { minPrice: number; maxPrice: number; brands: string[]; families: string[]; classes?: string[]; sort: "relevance" | "price-asc" | "price-desc" }
 ): Product[] {
   let out = list.filter((p) => p.price >= opts.minPrice && p.price <= opts.maxPrice);
   if (opts.brands.length > 0) out = out.filter((p) => opts.brands.includes(p.brand));
   if (opts.families.length > 0) out = out.filter((p) => opts.families.includes(p.family));
+  if (opts.classes && opts.classes.length > 0) out = out.filter((p) => opts.classes!.includes(p.category));
   if (opts.sort === "price-asc") out = [...out].sort((a, b) => a.price - b.price);
   if (opts.sort === "price-desc") out = [...out].sort((a, b) => b.price - a.price);
   return out;
 }
 
-function ProductListingCard({ product }: { product: Product }) {
-=======
 function ProductListingCard({ product, onAddToCart }: { product: Product; onAddToCart: (id: string) => void }) {
->>>>>>> 489535aa1ccb5cbf6788dd4aa79f3d4426b3abb7
   return (
     <article className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
       <Link href={`/productos/${product.id}`} className="block flex-1">
@@ -116,12 +110,9 @@ function FilterSection({
 }
 
 export default function ProductosPage() {
-<<<<<<< HEAD
+  const { add: addToCart } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-=======
-  const { add: addToCart } = useCart();
->>>>>>> 489535aa1ccb5cbf6788dd4aa79f3d4426b3abb7
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(PRICE_MAX);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
@@ -147,11 +138,7 @@ export default function ProductosPage() {
         classes: selectedClasses,
         sort,
       }),
-<<<<<<< HEAD
-    [products, minPrice, maxPrice, selectedBrands, selectedFamilies, sort]
-=======
-    [minPrice, maxPrice, selectedBrands, selectedFamilies, selectedClasses, sort]
->>>>>>> 489535aa1ccb5cbf6788dd4aa79f3d4426b3abb7
+    [products, minPrice, maxPrice, selectedBrands, selectedFamilies, selectedClasses, sort]
   );
 
   const toggleBrand = (b: string) => {
@@ -281,14 +268,10 @@ export default function ProductosPage() {
   return (
     <>
       <Header />
-<<<<<<< HEAD
-      <div className="w-full px-2 py-4 min-h-screen bg-gray-50">
+      <div className="w-full px-2 sm:px-4 py-4 min-h-screen bg-gray-50">
         {loading && (
           <div className="flex justify-center py-8 text-gray-500">Cargando productos...</div>
         )}
-=======
-      <div className="w-full px-2 sm:px-4 py-4 min-h-screen bg-gray-50">
->>>>>>> 489535aa1ccb5cbf6788dd4aa79f3d4426b3abb7
         {/* Breadcrumb y resumen */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
           <nav className="text-sm text-gray-500">
