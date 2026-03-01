@@ -25,7 +25,7 @@ export default function BannerCard({ banner, className = "" }: BannerCardProps) 
             className="object-cover object-left"
             sizes="(max-width: 768px) 100vw, 350px"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-foto-red/40 to-foto-red" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-foto-red/30 to-foto-red/90" />
         </div>
         <div className="relative z-10 flex flex-col flex-1 justify-end p-5 sm:p-6 text-white">
           <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white/95">
@@ -49,9 +49,10 @@ export default function BannerCard({ banner, className = "" }: BannerCardProps) 
             src={banner.image}
             alt={banner.title}
             fill
-            className="object-cover opacity-40"
+            className="object-cover object-center"
             sizes="(max-width: 768px) 100vw, 600px"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
         <div className="relative z-10 flex flex-col justify-between min-h-[200px] p-5 sm:p-6 text-white">
           <div>
@@ -87,16 +88,16 @@ export default function BannerCard({ banner, className = "" }: BannerCardProps) 
 
   // Square: imagen cubre todo el cuadrante, textos superpuestos
   return (
-    <div className={`relative rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow aspect-square min-h-0 ${className}`}>
+    <div className={`relative rounded-2xl overflow-hidden shadow-md hover:shadow-lg transition-shadow aspect-square min-h-0 group ${className}`}>
       <div className="absolute inset-0 z-0">
         <Image
           src={banner.image}
           alt={banner.title}
           fill
-          className="object-cover"
+          className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
           sizes="(max-width: 768px) 100vw, 320px"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
       </div>
       {tag && (
         <span className="absolute top-3 left-3 z-10 bg-foto-red text-white text-xs font-semibold px-3 py-1.5 rounded-full shadow">

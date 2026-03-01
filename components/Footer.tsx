@@ -2,32 +2,32 @@
 
 export default function Footer() {
   const comprar = [
-    { label: "Televisores", href: "#" },
-    { label: "Línea blanca", href: "#" },
-    { label: "Electrodomésticos", href: "#" },
-    { label: "Cómputo", href: "#" },
-    { label: "Celulares y tablets", href: "#" },
-    { label: "Audio", href: "#" },
+    { label: "Televisores", href: "/productos?categoria=televisores" },
+    { label: "Línea blanca", href: "/productos?categoria=linea-blanca" },
+    { label: "Electrodomésticos", href: "/productos?categoria=electrodomesticos" },
+    { label: "Cómputo", href: "/productos?categoria=computo" },
+    { label: "Celulares y tablets", href: "/productos?categoria=celulares-tablets" },
+    { label: "Audio", href: "/productos?categoria=audio" },
   ];
   const atencion = [
-    { label: "Horario y sucursales", href: "#" },
-    { label: "Talleres autorizados", href: "#" },
-    { label: "Opciones de crédito", href: "#" },
-    { label: "Registro de bodas y eventos", href: "#" },
-    { label: "Exportaciones", href: "#" },
+    { label: "Horario y sucursales", href: "/sucursales" },
+    { label: "Talleres autorizados", href: "/talleres" },
+    { label: "Opciones de crédito", href: "/opciones-de-credito" },
+    { label: "Registro de bodas y eventos", href: "/registro-eventos" },
+    { label: "Exportaciones", href: "/exportaciones" },
   ];
   const miCuenta = [
-    { label: "Ingresar", href: "#" },
-    { label: "Crear cuenta", href: "#" },
-    { label: "Historial de compras", href: "#" },
-    { label: "Rastrear pedido", href: "#" },
+    { label: "Ingresar", href: "/iniciar-sesion" },
+    { label: "Crear cuenta", href: "/registro" },
+    { label: "Historial de compras", href: "/historial" },
+    { label: "Rastrear pedido", href: "/rastrear-pedido" },
   ];
   const empresa = [
-    { label: "Sobre nosotros", href: "#" },
-    { label: "Ofertas", href: "#" },
-    { label: "Política de privacidad", href: "#" },
-    { label: "Términos y condiciones", href: "#" },
-    { label: "Garantías", href: "#" },
+    { label: "Sobre nosotros", href: "/sobre-nosotros" },
+    { label: "Ofertas", href: "/productos" },
+    { label: "Política de privacidad", href: "/politica-privacidad" },
+    { label: "Términos y condiciones", href: "/terminos-condiciones" },
+    { label: "Garantías", href: "/garantias" },
   ];
 
   const Column = ({
@@ -155,13 +155,13 @@ export default function Footer() {
             © {new Date().getFullYear()} Foto Sonido. Todos los derechos reservados.
           </p>
           <div className="flex flex-wrap gap-4 text-xs">
-            <a href="#" className="text-slate-500 hover:text-slate-400 transition-colors">
+            <a href="/politica-privacidad" className="text-slate-500 hover:text-slate-400 transition-colors">
               Aviso de privacidad
             </a>
-            <a href="#" className="text-slate-500 hover:text-slate-400 transition-colors">
+            <a href="/terminos-condiciones" className="text-slate-500 hover:text-slate-400 transition-colors">
               Términos de uso
             </a>
-            <a href="#" className="text-slate-500 hover:text-slate-400 transition-colors">
+            <a href="/politica-privacidad" className="text-slate-500 hover:text-slate-400 transition-colors">
               Política de cookies
             </a>
           </div>

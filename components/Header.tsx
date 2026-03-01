@@ -1,12 +1,16 @@
 "use client";
 
+import Link from "next/link";
+import { useCart } from "@/context/CartContext";
+
 export default function Header() {
+  const { count: cartCount } = useCart();
   const navLinks = [
-    { label: "FAQ", href: "#faq" },
-    { label: "Novedades", href: "#novedades" },
-    { label: "Blog", href: "#blog" },
-    { label: "Beneficios", href: "#beneficios" },
-    { label: "Talleres", href: "#talleres" },
+    { label: "FAQ", href: "/faq" },
+    { label: "Novedades", href: "/novedades" },
+    { label: "Blog", href: "/blog" },
+    { label: "Beneficios", href: "/beneficios" },
+    { label: "Talleres", href: "/talleres" },
   ];
 
   return (
@@ -16,18 +20,18 @@ export default function Header() {
         <div className="flex items-center justify-between gap-4 flex-wrap">
           {/* Menú hamburguesa + Logo */}
           <div className="flex items-center gap-2 min-w-0">
-            <button
-              type="button"
+            <Link
+              href="/productos"
               className="p-2 rounded hover:bg-white/10 transition-colors"
-              aria-label="Menú"
+              aria-label="Menú de filtros y categorías"
             >
               <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
               </svg>
-            </button>
-            <a href="/" className="flex items-center shrink-0 font-bold text-xl uppercase tracking-tight">
+            </Link>
+            <Link href="/" className="flex items-center shrink-0 font-bold text-xl uppercase tracking-tight">
               Foto Sonido
-            </a>
+            </Link>
           </div>
 
           {/* Barra de búsqueda con botón amarillo */}
@@ -57,24 +61,24 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
             </a>
-            <a href="#perfil" className="p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Mi cuenta">
+            <Link href="/cuenta" className="p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Mi cuenta">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
-            </a>
-            <a href="#chat" className="p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Chat">
+            </Link>
+            <Link href="/acarreo" className="p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Acarreo y entrega">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
               </svg>
-            </a>
-            <a href="#carrito" className="relative p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Carrito">
+            </Link>
+            <Link href="/carrito" className="relative p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Carrito">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
               </svg>
               <span className="absolute top-1 right-1 bg-foto-yellow text-gray-900 text-xs font-bold min-w-[18px] h-[18px] rounded-full flex items-center justify-center">
-                0
+                {cartCount}
               </span>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -86,12 +90,12 @@ export default function Header() {
           <nav className="flex items-center gap-0 flex-wrap">
             {navLinks.map((link, i) => (
               <span key={link.href} className="flex items-center gap-0">
-                <a
+                <Link
                   href={link.href}
                   className="px-3 py-1.5 text-sm font-medium hover:underline"
                 >
                   {link.label}
-                </a>
+                </Link>
                 {i < navLinks.length - 1 && (
                   <span className="text-white/50 select-none" aria-hidden>|</span>
                 )}
@@ -101,19 +105,19 @@ export default function Header() {
 
           {/* Horario, crédito y socios (derecha) */}
           <div className="flex items-center gap-0 flex-wrap text-sm">
-            <a href="#horario" className="flex items-center gap-1.5 px-3 py-1.5 hover:underline">
+            <Link href="/sucursales" className="flex items-center gap-1.5 px-3 py-1.5 hover:underline">
               <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <span>Horario de sucursales</span>
-            </a>
+            </Link>
             <span className="text-white/50 select-none" aria-hidden>|</span>
-            <a href="#credito" className="flex items-center gap-1.5 px-3 py-1.5 hover:underline">
+            <Link href="/opciones-de-credito" className="flex items-center gap-1.5 px-3 py-1.5 hover:underline">
               <svg className="w-5 h-5 shrink-0 text-foto-yellow" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
               </svg>
               <span>Opciones de Crédito</span>
-            </a>
+            </Link>
             <span className="text-white/50 select-none" aria-hidden>|</span>
             <span className="px-2 font-semibold">BAC</span>
             <span className="text-white/50 select-none">|</span>

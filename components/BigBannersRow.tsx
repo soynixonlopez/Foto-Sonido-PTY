@@ -21,10 +21,10 @@ export default function BigBannersRow({ banners }: BigBannersRowProps) {
                 src={b.image}
                 alt={b.title}
                 fill
-                className="object-cover opacity-60"
+                className="object-cover object-center"
                 sizes="(max-width: 768px) 100vw, 400px"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
             </div>
             {b.brand && (
               <span className="absolute top-3 right-3 z-10 text-white text-sm font-bold tracking-wider">
