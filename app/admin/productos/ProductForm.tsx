@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
-import type { ProductRow } from "@/lib/supabase/types";
+import type { ProductRow, ProductUpdate } from "@/lib/supabase/types";
 import { categories } from "@/lib/data";
 import { FILTER_BRANDS } from "@/lib/products-data";
 
@@ -138,7 +138,7 @@ export default function ProductForm({ product }: ProductFormProps) {
         const uploaded = await uploadFiles();
         imageUrls = [...existingImages, ...uploaded];
       }
-      const payload = {
+      const payload: ProductUpdate = {
         name: form.name.trim(),
         description: form.description.trim() || null,
         price,
@@ -154,12 +154,14 @@ export default function ProductForm({ product }: ProductFormProps) {
       if (product) {
         const { error: updateErr } = await supabase
           .from("products")
+          // @ts-ignore — Supabase infiere 'never' en .update() con tipos Database genéricos
           .update(payload)
           .eq("id", product.id);
         if (updateErr) throw new Error(updateErr.message);
         router.push("/admin/productos");
         router.refresh();
       } else {
+        // @ts-ignore — Supabase infiere 'never' en .insert() con tipos Database genéricos
         const { error: insertErr } = await supabase.from("products").insert(payload);
         if (insertErr) throw new Error(insertErr.message);
         router.push("/admin/productos");

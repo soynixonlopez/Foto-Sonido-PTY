@@ -62,6 +62,7 @@ export default function ProductoDetallePage() {
       const total = product.price * orderQty;
       const { data: order, error: orderErr } = await supabase
         .from("orders")
+        // @ts-ignore — Supabase infiere 'never' en .insert() con tipos Database genéricos
         .insert({ status: "pendiente", total, user_email: orderEmail || null })
         .select("id")
         .single();
@@ -69,12 +70,15 @@ export default function ProductoDetallePage() {
         setOrderError(orderErr?.message ?? "No se pudo crear el pedido.");
         return;
       }
-      const { error: itemErr } = await supabase.from("order_items").insert({
-        order_id: order.id,
-        product_id: product.id,
-        quantity: orderQty,
-        price: product.price,
-      });
+      const orderId = (order as { id: string }).id;
+      const { error: itemErr } = await supabase.from("order_items")
+        // @ts-ignore — Supabase infiere 'never' en .insert() con tipos Database genéricos
+        .insert({
+          order_id: orderId,
+          product_id: product.id,
+          quantity: orderQty,
+          price: product.price,
+        });
       if (itemErr) {
         setOrderError(itemErr.message);
         return;
