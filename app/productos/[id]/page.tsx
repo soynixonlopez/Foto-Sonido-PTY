@@ -68,7 +68,7 @@ export default function ProductoDetallePage() {
         .insert({
           status: "pendiente",
           total,
-          user_email: orderEmail || (user?.email ?? null),
+          user_email: orderEmail ?? user?.email ?? null,
           user_id: user?.id ?? null,
         })
         .select("id")
