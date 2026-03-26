@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         };
       if (data?.user) {
         try {
-          await supabase.from("customer_profiles").upsert(
+          await (supabase.from("customer_profiles") as any).upsert(
             {
               id: data.user.id,
               email: data.user.email ?? email,
