@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import { getMarketplaceProductById } from "@/lib/supabase/public";
 import { getProductById } from "@/lib/products-data";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import type { Product } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
 
@@ -23,6 +24,7 @@ export default function ProductoDetallePage() {
 
   const [product, setProduct] = useState<Product | null | undefined>(undefined);
   const { add: addToCart } = useCart();
+  const { user } = useAuth();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -63,7 +65,12 @@ export default function ProductoDetallePage() {
       const { data: order, error: orderErr } = await supabase
         .from("orders")
         // @ts-ignore — Supabase infiere 'never' en .insert() con tipos Database genéricos
-        .insert({ status: "pendiente", total, user_email: orderEmail || null })
+        .insert({
+          status: "pendiente",
+          total,
+          user_email: orderEmail || user?.email ?? null,
+          user_id: user?.id ?? null,
+        })
         .select("id")
         .single();
       if (orderErr || !order) {

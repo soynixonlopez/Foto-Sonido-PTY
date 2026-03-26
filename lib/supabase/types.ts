@@ -17,6 +17,8 @@ export interface Database {
           name: string;
           description: string | null;
           price: number;
+              color: string | null;
+              previous_price: number | null;
           category: string;
           brand: string;
           product_id: string;
@@ -32,6 +34,8 @@ export interface Database {
           name: string;
           description?: string | null;
           price: number;
+              color?: string | null;
+              previous_price?: number | null;
           category: string;
           brand: string;
           product_id: string;
@@ -47,6 +51,8 @@ export interface Database {
           name?: string;
           description?: string | null;
           price?: number;
+              color?: string | null;
+              previous_price?: number | null;
           category?: string;
           brand?: string;
           product_id?: string;
@@ -63,6 +69,8 @@ export interface Database {
           status: string;
           total: number | null;
           user_email: string | null;
+          user_id: string | null;
+          points_earned: number;
         };
         Insert: {
           id?: string;
@@ -70,6 +78,8 @@ export interface Database {
           status?: string;
           total?: number | null;
           user_email?: string | null;
+          user_id?: string | null;
+          points_earned?: number;
         };
         Update: {
           id?: string;
@@ -77,6 +87,34 @@ export interface Database {
           status?: string;
           total?: number | null;
           user_email?: string | null;
+          user_id?: string | null;
+          points_earned?: number;
+        };
+      };
+      customer_profiles: {
+        Row: {
+          id: string;
+          email: string;
+          full_name: string;
+          points: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id: string;
+          email: string;
+          full_name?: string;
+          points?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          email?: string;
+          full_name?: string;
+          points?: number;
+          created_at?: string;
+          updated_at?: string;
         };
       };
       order_items: {

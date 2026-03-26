@@ -26,6 +26,7 @@ Si solo tienes `.env.local.example`, cópialo y renómbralo a `.env.local`, lueg
 9. Pulsa **Run** de nuevo.
 10. Debe crearse el bucket `product-images` en **Storage**. Si da error de “policy already exists”, puedes ignorarlo o borrar antes las políticas de `storage.objects` en el Dashboard.
 11. **Nueva query** de nuevo: copia todo `supabase/migrations/003_product_sections.sql` y ejecuta **Run**. Así se añade la columna `sections` a `products` para Promociones, Últimos modelos, Destacados y Nuevos.
+12. **Cuentas de cliente y puntos:** Nueva query, copia todo `supabase/migrations/004_client_auth.sql` y ejecuta **Run**. Se crean la tabla `customer_profiles`, las columnas `user_id` y `points_earned` en `orders`, y las políticas para que los clientes vean solo sus pedidos y acumulen puntos cuando el pedido esté en estado «entregado».
 
 ---
 

@@ -11,6 +11,7 @@ export interface Product {
   description?: string;
   price: number;
   previousPrice?: number;
+  color?: string;
   image: string;
   images?: string[];
   badge?: "TOP SALE" | "NUEVO" | "OFERTA";

@@ -17,6 +17,8 @@ function rowToProduct(row: ProductRow): Product {
     name: row.name,
     description: row.description ?? undefined,
     price: Number(row.price),
+    previousPrice: row.previous_price != null ? Number(row.previous_price) : undefined,
+    color: row.color ?? undefined,
     image: images[0] ?? "",
     images: images.length > 0 ? images : undefined,
     category: row.category,

@@ -101,8 +101,28 @@ export default function AdminProductosPage() {
                   <td className="py-2 px-2">
                     <p className="text-white font-medium line-clamp-2">{p.name}</p>
                     <p className="text-slate-500 text-xs">{p.product_id}</p>
+                    {p.color && (
+                      <div className="mt-1 flex items-center gap-2">
+                        <span
+                          className="w-3 h-3 rounded-full border border-slate-600 shrink-0"
+                          style={{ backgroundColor: p.color ?? undefined }}
+                          aria-label={`Color ${p.color}`}
+                          title={`Color: ${p.color}`}
+                        />
+                        <span className="text-slate-500 text-[11px] line-clamp-1">{p.color}</span>
+                      </div>
+                    )}
                   </td>
-                  <td className="py-2 px-2 text-white">${Number(p.price).toFixed(2)}</td>
+                  <td className="py-2 px-2">
+                    <div className="flex flex-col">
+                      <span className="text-white">${Number(p.price).toFixed(2)}</span>
+                      {p.previous_price != null && p.previous_price > 0 && (
+                        <span className="text-slate-500 text-xs line-through">
+                          Antes ${Number(p.previous_price).toFixed(2)}
+                        </span>
+                      )}
+                    </div>
+                  </td>
                   <td className="py-2 px-2 text-slate-300 text-sm">{p.category}</td>
                   <td className="py-2 px-2">
                     <span

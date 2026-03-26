@@ -22,6 +22,8 @@ type FormData = {
   name: string;
   description: string;
   price: string;
+  previousPrice: string;
+  color: string;
   category: string;
   brand: string;
   product_id: string;
@@ -34,6 +36,8 @@ const defaultForm: FormData = {
   name: "",
   description: "",
   price: "",
+  previousPrice: "",
+  color: "",
   category: categories[0]?.name ?? "",
   brand: FILTER_BRANDS[0] ?? "",
   product_id: "",
@@ -52,6 +56,8 @@ export default function ProductForm({ product }: ProductFormProps) {
     name: product.name,
     description: product.description ?? "",
     price: String(product.price),
+    previousPrice: product.previous_price != null ? String(product.previous_price) : "",
+    color: product.color ?? "",
     category: product.category,
     brand: product.brand,
     product_id: product.product_id,
@@ -121,9 +127,15 @@ export default function ProductForm({ product }: ProductFormProps) {
     e.preventDefault();
     setError(null);
     const price = parseFloat(form.price);
+    const previousPrice =
+      form.previousPrice.trim().length > 0 ? parseFloat(form.previousPrice) : null;
     const stock = form.stock.trim() ? parseInt(form.stock, 10) : null;
     if (isNaN(price) || price < 0) {
       setError("Precio no válido.");
+      return;
+    }
+    if (previousPrice != null && (isNaN(previousPrice) || previousPrice < 0)) {
+      setError("Precio antes no válido.");
       return;
     }
     if (totalImages === 0) {
@@ -142,6 +154,8 @@ export default function ProductForm({ product }: ProductFormProps) {
         name: form.name.trim(),
         description: form.description.trim() || null,
         price,
+        previous_price: previousPrice,
+        color: form.color.trim() || null,
         category: form.category.trim(),
         brand: form.brand.trim(),
         product_id: form.product_id.trim(),
@@ -230,7 +244,7 @@ export default function ProductForm({ product }: ProductFormProps) {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label className={labelClass}>Precio ($)</label>
+            <label className={labelClass}>Precio después ($)</label>
             <input
               type="number"
               step="0.01"
@@ -239,6 +253,28 @@ export default function ProductForm({ product }: ProductFormProps) {
               onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
               required
               className={inputClass}
+            />
+          </div>
+          <div>
+            <label className={labelClass}>Precio antes ($) (opcional)</label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.previousPrice}
+              onChange={(e) => setForm((f) => ({ ...f, previousPrice: e.target.value }))}
+              className={inputClass}
+              placeholder="Ej. 499.99"
+            />
+          </div>
+          <div>
+            <label className={labelClass}>Color (opcional)</label>
+            <input
+              type="text"
+              value={form.color}
+              onChange={(e) => setForm((f) => ({ ...f, color: e.target.value }))}
+              className={inputClass}
+              placeholder="Ej. Negro o #000000"
             />
           </div>
           <div>

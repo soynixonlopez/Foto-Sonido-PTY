@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Header() {
   const { count: cartCount } = useCart();
+  const { user, signOut } = useAuth();
   const navLinks = [
     { label: "FAQ", href: "/faq" },
     { label: "Novedades", href: "/novedades" },
@@ -66,6 +68,16 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </Link>
+            {user && (
+              <button
+                type="button"
+                onClick={() => signOut().then(() => window.location.href = "/")}
+                className="p-2.5 rounded-lg hover:bg-white/10 transition-colors text-sm font-medium"
+                title="Cerrar sesión"
+              >
+                Salir
+              </button>
+            )}
             <Link href="/acarreo" className="p-2.5 rounded-lg hover:bg-white/10 transition-colors" aria-label="Acarreo y entrega">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
