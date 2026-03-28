@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import BrandLogo from "@/components/BrandLogo";
 import type { EventRegistrationData } from "@/lib/types";
 
 interface EventRegistrationBannerProps {
@@ -18,7 +19,9 @@ export default function EventRegistrationBanner({ data }: EventRegistrationBanne
             </p>
             <h2 className="mt-2 text-2xl sm:text-3xl font-bold text-gray-900">
               <span className="text-pink-600 font-serif italic">{data.subtitle}</span>
-              <span className="block text-gray-800 mt-1">Foto Sonido</span>
+              <span className="flex justify-center lg:justify-start mt-3">
+                <BrandLogo variant="inline" className="!h-8 sm:!h-9 max-w-[220px]" />
+              </span>
             </h2>
             <p className="mt-4 text-gray-600 max-w-md">{data.description}</p>
             <button

@@ -1,5 +1,7 @@
 "use client";
 
+import BrandLogo from "@/components/BrandLogo";
+
 export default function Footer() {
   const comprar = [
     { label: "Televisores", href: "/productos?categoria=televisores" },
@@ -92,8 +94,8 @@ export default function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 lg:gap-4">
           {/* Logo + redes */}
           <div className="col-span-2 md:col-span-3 lg:col-span-2 space-y-6">
-            <a href="/" className="inline-block">
-              <span className="text-2xl font-bold tracking-tight text-white">Foto Sonido</span>
+            <a href="/" className="inline-block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-foto-red" aria-label="Foto Sonido — Inicio">
+              <BrandLogo variant="footer" />
             </a>
             <p className="text-sm text-slate-400 leading-relaxed max-w-xs">
               Tecnología, línea blanca y electrodomésticos. Las mejores marcas con opciones de crédito y envío a domicilio.

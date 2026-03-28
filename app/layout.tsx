@@ -15,7 +15,8 @@ export const metadata: Metadata = {
   title: "Foto Sonido | Marketplace - Línea Blanca, Electrodomésticos y Tecnología",
   description: "Tu marketplace de confianza para línea blanca, electrodomésticos, tecnología y más.",
   icons: {
-    icon: "/icon.svg",
+    icon: [{ url: "/images/logos/logoFotoSonido.png", type: "image/png" }],
+    apple: "/images/logos/logoFotoSonido.png",
   },
 };
 

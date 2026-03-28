@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 import Link from "next/link";
+import BrandLogo from "@/components/BrandLogo";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -35,8 +36,10 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md">
         <div className="bg-slate-800 rounded-2xl shadow-xl border border-slate-700 p-8">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-white">Foto Sonido</h1>
-            <p className="text-slate-400 text-sm mt-1">Panel de administración</p>
+            <div className="flex justify-center mb-3">
+              <BrandLogo variant="admin" className="max-w-[min(100%,280px)]" />
+            </div>
+            <p className="text-slate-400 text-sm">Panel de administración</p>
           </div>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>

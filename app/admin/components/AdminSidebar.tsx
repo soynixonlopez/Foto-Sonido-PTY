@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import BrandLogo from "@/components/BrandLogo";
 
 const nav = [
   { href: "/admin/dashboard", label: "Dashboard", icon: DashboardIcon },
@@ -14,13 +15,10 @@ export default function AdminSidebar() {
   return (
     <aside className="w-64 shrink-0 bg-slate-800 border-r border-slate-700 flex flex-col min-h-screen">
       <div className="p-4 border-b border-slate-700">
-        <Link href="/admin/dashboard" className="flex items-center gap-2">
-          <span className="w-9 h-9 rounded-lg bg-foto-red flex items-center justify-center text-white font-bold text-sm">
-            FS
-          </span>
-          <span className="font-semibold text-white">Foto Sonido</span>
+        <Link href="/admin/dashboard" className="flex flex-col gap-1.5 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-foto-red" aria-label="Foto Sonido — Panel">
+          <BrandLogo variant="inline" className="!h-8 sm:!h-9 max-w-[200px]" />
+          <span className="text-slate-500 text-xs">Panel de administración</span>
         </Link>
-        <p className="text-slate-500 text-xs mt-1 ml-11">Panel de administración</p>
       </div>
       <nav className="flex-1 p-3 space-y-0.5">
         {nav.map((item) => {

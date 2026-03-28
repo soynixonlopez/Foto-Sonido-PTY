@@ -31,10 +31,10 @@ export default async function Home() {
       <CategoryStrip />
 
       <main className="w-full py-4 sm:py-6">
-        {/* Móvil: columna única */}
+        {/* Móvil: misma estructura de antes; las imágenes usan object-contain dentro de cada celda */}
         <div className="grid grid-cols-1 gap-3 lg:hidden">
-          <div className="aspect-[2/3] min-h-[320px]">
-            <BannerCard banner={bannerVertical} className="h-full min-h-0" />
+          <div className="aspect-[2/3] min-h-[280px]">
+            <BannerCard banner={bannerVertical} className="h-full min-h-0" priority />
           </div>
           <div className="grid grid-cols-2 gap-2">
             <BannerCard banner={bannerTv} />
@@ -46,12 +46,12 @@ export default async function Home() {
             <BannerCard banner={bannerSonido} />
             <BannerCard banner={bannerClases} />
           </div>
-          <div className="min-h-[200px]">
-            <BannerCard banner={bannerHorizontal} className="h-full min-h-[200px]" />
+          <div className="min-h-[180px]">
+            <BannerCard banner={bannerHorizontal} className="h-full min-h-[180px]" />
           </div>
         </div>
 
-        {/* Desktop: izquierda = 2x2 | centro = banner vertical "Foto Sonido te llama" | derecha = Desayuno + Producto + Futboleros */}
+        {/* Desktop: grid fijo como antes (2 + columna central + 2, dos filas) */}
         <div
           className="hidden lg:grid gap-2 sm:gap-3 w-full"
           style={{
@@ -59,29 +59,24 @@ export default async function Home() {
             gridTemplateRows: "minmax(220px, 1fr) minmax(220px, 1fr)",
           }}
         >
-          {/* Izquierda: Desayuno, Producto */}
           <div className="min-h-0 aspect-square max-h-full">
-            <BannerCard banner={bannerDesayuno} className="h-full w-full" />
+            <BannerCard banner={bannerDesayuno} className="h-full w-full" priority />
           </div>
           <div className="min-h-0 aspect-square max-h-full">
             <ProductCard product={productDestacado} compact />
           </div>
-          {/* Centro: banner vertical "Foto Sonido te llama" */}
           <div className="row-span-2 min-h-[440px]" style={{ gridColumn: 3 }}>
-            <BannerCard banner={bannerVertical} className="h-full min-h-0" />
+            <BannerCard banner={bannerVertical} className="h-full min-h-0" priority />
           </div>
-          {/* Derecha: 4 cuadros (TV, Laptop | Sonido, Clases) */}
           <div className="min-h-0 aspect-square max-h-full">
             <BannerCard banner={bannerTv} className="h-full w-full" />
           </div>
           <div className="min-h-0 aspect-square max-h-full">
             <BannerCard banner={bannerLaptop} className="h-full w-full" />
           </div>
-          {/* Fila 2 izquierda: banner horizontal */}
           <div className="min-h-0 col-span-2 row-span-1" style={{ minHeight: "220px", gridColumn: "1 / 3" }}>
             <BannerCard banner={bannerHorizontal} className="h-full w-full min-h-[200px]" />
           </div>
-          {/* Fila 2 derecha: Sonido, Clases */}
           <div className="min-h-0 aspect-square max-h-full">
             <BannerCard banner={bannerSonido} className="h-full w-full" />
           </div>

@@ -40,6 +40,8 @@ export interface Banner {
   tag?: string;
   bgClass?: string;
   brands?: BannerBrand[];
+  /** ancho / alto — reduce salto de layout antes de cargar la imagen */
+  aspectRatio?: number;
 }
 
 export interface PromoCarouselItem {
@@ -48,6 +50,7 @@ export interface PromoCarouselItem {
   subtitle: string;
   image: string;
   cta?: string;
+  aspectRatio?: number;
 }
 
 export interface BigBannerItem {
@@ -57,6 +60,7 @@ export interface BigBannerItem {
   image: string;
   brand?: string;
   bgClass?: string;
+  aspectRatio?: number;
 }
 
 export interface EventRegistrationData {

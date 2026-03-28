@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import BrandLogo from "@/components/BrandLogo";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 
@@ -31,8 +32,12 @@ export default function Header() {
                 <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
               </svg>
             </Link>
-            <Link href="/" className="flex items-center shrink-0 font-bold text-xl uppercase tracking-tight">
-              Foto Sonido
+            <Link
+              href="/"
+              className="flex items-center shrink-0 rounded-lg bg-white px-2 py-1 shadow-sm hover:bg-white/95 transition-colors"
+              aria-label="Foto Sonido — Inicio"
+            >
+              <BrandLogo variant="header" priority />
             </Link>
           </div>
 

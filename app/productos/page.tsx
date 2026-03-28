@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import {
   filterProducts,
   FILTER_BRANDS,
@@ -157,8 +158,22 @@ export default function ProductosPage() {
     );
   };
 
-  const displayed = filtered.slice(0, PAGE_SIZE);
+  const [page, setPage] = useState(1);
   const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  useEffect(() => {
+    setPage(1);
+  }, [minPrice, maxPrice, selectedBrands, selectedFamilies, selectedClasses, sort]);
+
+  useEffect(() => {
+    setPage((p) => Math.min(p, totalPages));
+  }, [totalPages]);
+
+  const safePage = Math.min(page, totalPages);
+  const rangeStart = total === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1;
+  const rangeEnd = total === 0 ? 0 : Math.min(safePage * PAGE_SIZE, total);
+  const displayed = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const sidebarContent = (
     <aside className="lg:w-72 xl:w-80 shrink-0 space-y-1 bg-white rounded-xl border border-gray-200 p-4 shadow-sm h-fit lg:sticky lg:top-24">
@@ -280,7 +295,7 @@ export default function ProductosPage() {
             <span className="text-gray-700">Categorías</span>
           </nav>
           <p className="text-sm text-gray-600">
-            1-{Math.min(PAGE_SIZE, total)} de {total} resultados
+            {total === 0 ? "0 resultados" : `${rangeStart}-${rangeEnd} de ${total} resultados`}
           </p>
         </div>
 
@@ -341,9 +356,42 @@ export default function ProductosPage() {
                 No hay productos que coincidan con los filtros.
               </p>
             )}
+            {total > PAGE_SIZE && (
+              <nav
+                className="mt-8 flex flex-wrap items-center justify-center gap-3"
+                aria-label="Paginación de productos"
+              >
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={safePage <= 1}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-45 disabled:pointer-events-none disabled:cursor-not-allowed transition-colors"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Anterior
+                </button>
+                <span className="text-sm text-gray-600 tabular-nums px-2">
+                  Página {safePage} de {totalPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={safePage >= totalPages}
+                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-45 disabled:pointer-events-none disabled:cursor-not-allowed transition-colors"
+                >
+                  Siguiente
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </nav>
+            )}
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 }

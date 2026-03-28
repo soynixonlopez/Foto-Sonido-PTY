@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import { getMarketplaceProductById } from "@/lib/supabase/public";
 import { getProductById } from "@/lib/products-data";
 import { useCart } from "@/context/CartContext";
@@ -116,6 +117,7 @@ export default function ProductoDetallePage() {
       <>
         <Header />
         <div className="w-full px-2 py-12 text-center text-gray-500">Cargando...</div>
+        <Footer />
       </>
     );
   }
@@ -130,6 +132,7 @@ export default function ProductoDetallePage() {
             Ver todos los productos
           </Link>
         </div>
+        <Footer />
       </>
     );
   }
@@ -301,6 +304,7 @@ export default function ProductoDetallePage() {
           </div>
         </div>
       </div>
+      <Footer />
 
       {orderModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
